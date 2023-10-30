@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../../Adafruit_CircuitPython_Bundle/libraries/drivers"
+		}
+	],
+	"settings": {}
+}
