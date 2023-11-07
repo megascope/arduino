@@ -1,4 +1,5 @@
 #include <FastLED.h>
+
 #include "characters.h"
 
 // Silicon sealed LED braid built into 10x5 panel
@@ -7,13 +8,6 @@
 // see https://github.com/FastLED/FastLED/blob/master/examples/ColorPalette/ColorPalette.ino
 
 CRGB leds[NUM_LEDS];
-
-Unit idx = 0;
-Unit prev = 0;
-
-TBlendType    currentBlending;
-CRGBPalette16 currentPalette;
-extern const TProgmemPalette16 SirenPalette PROGMEM;
 
 struct Pixel {
   Unit x;
@@ -43,26 +37,11 @@ void setup() {
   FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
   FastLED.setBrightness(BRIGHTNESS);
 
-  currentPalette = SirenPalette;
-  currentBlending = LINEARBLEND;
 #ifdef DEBUG
   Serial.begin(9600);
 #endif
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  loop_lines();
-}
-
-void loop_lines()
-{
-  for (Unit x = 0; x < WIDTH; ++x) {
-    FastLED.clear();
-    vert_line(x, CRGB::AliceBlue);
-    FastLED.delay(100);
-  }
-}
 
 // loop the whole thing
 void loop_xtoy()
@@ -70,7 +49,7 @@ void loop_xtoy()
   for (Unit y = 0; y < HEIGHT; ++y) {
     for (Unit x = 0; x < WIDTH; ++x) {
       Pixel p(x, y);
-      idx = p.index();
+      auto idx = p.index();
 
       leds[idx] = CRGB::Red;
 
@@ -89,8 +68,7 @@ void loop_xtoy()
 
 void draw_character(Unit startx, CRGB color, unsigned cindex)
 {
-  const char * bob = ALL_CHARS[cindex];
-
+  
   for (Unit x = 0; x < CHAR_WIDTH; ++x) {
     for (Unit y = 0; y < CHAR_WIDTH; ++y) {
       Unit newx = startx + x;
@@ -106,83 +84,16 @@ void vert_line(Unit x, CRGB color) {
   }
 }
 
-void cp_test()
+void loop_lines()
 {
-  // only lighting up some of the LEDS for the fire engine costume
-  ++idx;
-  idx &= 0xff;
-  leds[1] = ColorFromPalette( currentPalette, idx + 0, BRIGHTNESS, currentBlending);
-  leds[2] = ColorFromPalette( currentPalette, (idx + 64) & 0xff, BRIGHTNESS, currentBlending);
-
-  // phase difference gives a kind of circular effect
-  leds[8] = ColorFromPalette( currentPalette, idx, BRIGHTNESS, currentBlending);
-  leds[9] = ColorFromPalette( currentPalette, (idx + 8) & 0xff, BRIGHTNESS, currentBlending);
-  leds[10] = ColorFromPalette( currentPalette, (idx + 16) & 0xff, BRIGHTNESS, currentBlending);
-  leds[11] = ColorFromPalette( currentPalette, (idx + 32) & 0xff, BRIGHTNESS, currentBlending);
-
-  leds[30] = ColorFromPalette( currentPalette, idx, BRIGHTNESS, currentBlending);
-  leds[31] = ColorFromPalette( currentPalette, (idx + 64) & 0xff, BRIGHTNESS, currentBlending);
-
-  // reverse indexes so they go from front to back, du to circular mounting
-  leds[47] = ColorFromPalette( currentPalette, idx, BRIGHTNESS, currentBlending);
-  leds[46] = ColorFromPalette( currentPalette, (idx + 8) & 0xff, BRIGHTNESS, currentBlending);
-  leds[45] = ColorFromPalette( currentPalette, (idx + 16) & 0xff, BRIGHTNESS, currentBlending);
-  leds[44] = ColorFromPalette( currentPalette, (idx + 32) & 0xff, BRIGHTNESS, currentBlending);
-
-
-  // crazy strobe effect
-  /*
-  if ( idx <= 50 ) {
-    if ( idx > 0 ) {
-      leds[idx-1]  = CRGB::Black;
-    }
-    if ( idx < 50 ) {
-      leds[idx]  = CRGB::White;
-    }
-  }  
-  */
-  FastLED.show();
-  FastLED.delay(10);
+  for (Unit x = 0; x < WIDTH; ++x) {
+    FastLED.clear();
+    vert_line(x, CRGB::AliceBlue);
+    FastLED.delay(1000);
+  }
 }
 
-void test()
-{
-
-  unsigned short curr = idx < NUM_LEDS ? idx : 2*NUM_LEDS-idx;
-  leds[prev] = CRGB(0,0,0);
-  leds[curr] = CRGB(100,0,0);
-  prev = curr;
-  
-  FastLED.show();
-  if (++idx >= 2*NUM_LEDS) { idx = 0; }
-  delay(50);
+void loop() {
+  // put your main code here, to run repeatedly:
+  loop_lines();
 }
-
-
-// This example shows how to set up a static color palette
-// which is stored in PROGMEM (flash), which is almost always more
-// plentiful than RAM.  A static PROGMEM palette like this
-// takes up 64 bytes of flash.
-const TProgmemPalette16 SirenPalette PROGMEM =
-{
-    CRGB::Black,
-    CRGB::DarkRed,
-    CRGB::Red,
-    CRGB::DarkRed,
-    
-    CRGB::Black,
-    CRGB::DarkBlue,
-    CRGB::Blue,
-    CRGB::DarkBlue,
-    
-    CRGB::Black,
-    CRGB::DarkRed,
-    CRGB::Red,
-    CRGB::DarkRed,
-    
-    CRGB::Black,
-    CRGB::DarkBlue,
-    CRGB::Blue,
-    CRGB::DarkBlue
-};
-
