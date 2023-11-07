@@ -1,5 +1,4 @@
 #include <FastLED.h>
-
 #include "characters.h"
 
 // Silicon sealed LED braid built into 10x5 panel
@@ -59,7 +58,7 @@ void loop_xtoy()
       Serial.println(buffer);
       #endif
 
-      FastLED.delay(50); // delay also calls show
+      FastLED.delay(100); // delay also calls show
 
       leds[idx] = CRGB::Black; // reset after show
     }
@@ -89,11 +88,12 @@ void loop_lines()
   for (Unit x = 0; x < WIDTH; ++x) {
     FastLED.clear();
     vert_line(x, CRGB::AliceBlue);
-    FastLED.delay(1000);
+    FastLED.delay(100);
   }
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  //loop_xtoy();
   loop_lines();
 }
