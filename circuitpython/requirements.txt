@@ -1,0 +1,4 @@
+adafruit-circuitpython-circuitplayground
+adafruit-circuitpython-neopixel
+adafruit-circuitpython-thermistor
+

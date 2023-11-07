@@ -1,0 +1,7 @@
+{
+    "sketch": "sketch.ino",
+    "output": "build",
+    "configuration": "softdevice=s140v6,debug=l0,debug_output=serial",
+    "board": "adafruit:nrf52:cplaynrf52840",
+    "port": "/dev/tty.usbmodem11301"
+}
