@@ -1,9 +1,6 @@
-CC=clang
-CXX=clang
-
 TARGET_EXEC ?= test
 
-BUILD_DIR ?= ./build/clang
+BUILD_DIR ?= ./build/emulator
 SRC_DIRS ?= emulator
 LDFLAGS ?= -lstdc++
 SRCS := $(shell find $(SRC_DIRS) -name "*.cpp") $(shell ls *.cpp) 
