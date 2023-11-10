@@ -6,4 +6,4 @@
 #define DATA_PIN 11
 #define BRIGHTNESS 10
 
-using Unit = unsigned short;
+using Unit = unsigned char;

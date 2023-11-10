@@ -1,5 +1,5 @@
 #include <FastLED.h>
-#include "characters.h"
+#include "images.h"
 
 // Silicon sealed LED braid built into 10x5 panel
 // ALITOVE WS2811 12mm Diffused Digital RGB LED IP68 Waterproof DC 5V 50 lights
@@ -41,6 +41,43 @@ void setup() {
 #endif
 }
 
+Unit min(Unit a, Unit b) {
+  if (a < b) return a;
+  return b;
+}
+
+void draw_image(const XBM& image, const Pixel& start, const Pixel& offset, const CRGB& color) {
+  Unit draw_width = min(image.width-offset.x, WIDTH-start.x);
+  Unit draw_height = min(image.height-offset.y, HEIGHT-start.y);
+  for (Unit x=0; x < draw_width; ++x) {
+    for (Unit y=0; y < draw_height; ++y) {
+      if (image.is_pixel(offset.x+x, offset.y+y)) {
+        leds[Pixel::index(start.x+x, start.y+y)] = color;
+      }
+    }
+  }
+  
+}
+
+void scroll_image() {
+  const int delayms = 100;
+  const XBM& image = XBM::happy_diwali;
+  Pixel zero(0,0);
+
+  // first scroll all the away across the screen
+  for (Unit x = WIDTH-1; x>0; --x) {
+    FastLED.clear();
+    draw_image(image, Pixel(x, 0), zero, CRGB::AliceBlue);
+    FastLED.delay(delayms);
+  }
+
+  // then pull the image across
+  for (Unit x = 0; x < image.width; ++x) {
+    FastLED.clear();
+    draw_image(image, zero, Pixel(x, 0), CRGB::AliceBlue);
+    FastLED.delay(delayms);
+  }
+}
 
 // loop the whole thing
 void loop_xtoy()
@@ -65,17 +102,8 @@ void loop_xtoy()
   }
 }
 
-void draw_character(Unit startx, CRGB color, unsigned cindex)
-{
-  
-  for (Unit x = 0; x < CHAR_WIDTH; ++x) {
-    for (Unit y = 0; y < CHAR_WIDTH; ++y) {
-      Unit newx = startx + x;
-    }
 
-    if (x >= WIDTH) { return; }
-  }
-}
+
 
 void vert_line(Unit x, CRGB color) {
   for (Unit y = 0; y < HEIGHT; ++y) {
@@ -95,5 +123,6 @@ void loop_lines()
 void loop() {
   // put your main code here, to run repeatedly:
   //loop_xtoy();
-  loop_lines();
+  //loop_lines();
+  scroll_image();
 }
