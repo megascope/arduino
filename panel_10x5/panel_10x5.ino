@@ -1,5 +1,6 @@
 #include <FastLED.h>
 #include "images.h"
+#include "palettes.h"
 
 // Silicon sealed LED braid built into 10x5 panel
 // ALITOVE WS2811 12mm Diffused Digital RGB LED IP68 Waterproof DC 5V 50 lights
@@ -45,57 +46,6 @@ void setup() {
 #endif
 }
 
-// A mostly red palette with green accents and white trim.
-// "CRGB::Gray" is used as white to keep the brightness more uniform.
-const TProgmemRGBPalette16 RedGreenWhite_p FL_PROGMEM =
-{  CRGB::Red, CRGB::Red, CRGB::Red, CRGB::Red, 
-   CRGB::Red, CRGB::Red, CRGB::Red, CRGB::Red, 
-   CRGB::Red, CRGB::Red, CRGB::Gray, CRGB::Gray, 
-   CRGB::Green, CRGB::Green, CRGB::Green, CRGB::Green };
-
-// A palette reminiscent of large 'old-school' C9-size tree lights
-// in the five classic colors: red, orange, green, blue, and white.
-#define C9_Red    0xB80400
-#define C9_Orange 0x902C02
-#define C9_Green  0x046002
-#define C9_Blue   0x070758
-#define C9_White  0x606820
-const TProgmemRGBPalette16 RetroC9_p FL_PROGMEM =
-{  C9_Red,    C9_Orange, C9_Red,    C9_Orange,
-   C9_Orange, C9_Red,    C9_Orange, C9_Red,
-   C9_Green,  C9_Green,  C9_Green,  C9_Green,
-   C9_Blue,   C9_Blue,   C9_Blue,
-   C9_White
-};
-
-// A red and white striped palette
-// "CRGB::Gray" is used as white to keep the brightness more uniform.
-const TProgmemRGBPalette16 RedWhite_p FL_PROGMEM =
-{  CRGB::Red,  CRGB::Red,  CRGB::Red,  CRGB::Red, 
-   CRGB::Gray, CRGB::Gray, CRGB::Gray, CRGB::Gray,
-   CRGB::Red,  CRGB::Red,  CRGB::Red,  CRGB::Red, 
-   CRGB::Gray, CRGB::Gray, CRGB::Gray, CRGB::Gray };
-
-
-// Add or remove palette names from this list to control which color
-// palettes are used, and in what order.
-const TProgmemRGBPalette16* ActivePaletteList[] = {
-  &RetroC9_p,
-  &RainbowColors_p,
-  &RedGreenWhite_p,
-  &PartyColors_p,
-  &RedWhite_p,
-};
-
-// Advance to the next color palette in the list (above).
-void chooseNextColorPalette( CRGBPalette16& pal)
-{
-  const uint8_t numberOfPalettes = sizeof(ActivePaletteList) / sizeof(ActivePaletteList[0]);
-  static uint8_t whichPalette = -1; 
-  whichPalette = addmod8( whichPalette, 1, numberOfPalettes);
-
-  pal = *(ActivePaletteList[whichPalette]);
-}
 
 void draw_image(const XBM& image, const Pixel& start, const Pixel& offset) {
   Unit draw_width = min(image.width-offset.x, WIDTH-start.x);
@@ -136,7 +86,6 @@ void draw_image(const XBM& image, const Pixel& start, const Pixel& offset) {
 }
 
 void scroll_image() {
-  const int delayms = 50;
   const XBM& image = XBM::happy_diwali;
   Pixel zero(0,0);
 
@@ -144,7 +93,7 @@ void scroll_image() {
   if (false) {
     FastLED.clear();
     draw_image(image, zero, zero);
-    FastLED.delay(delayms);
+    FastLED.delay(DELAY);
     return;
   }
 
@@ -152,14 +101,14 @@ void scroll_image() {
   for (Unit x = WIDTH-1; x>0; --x) {
     FastLED.clear();
     draw_image(image, Pixel(x, 0), zero);
-    FastLED.delay(delayms);
+    FastLED.delay(DELAY);
   }
 
   // then pull the image across
   for (Unit x = 0; x < image.width; ++x) {
     FastLED.clear();
     draw_image(image, zero, Pixel(x, 0));
-    FastLED.delay(delayms);
+    FastLED.delay(DELAY);
   }
 }
 
@@ -179,8 +128,7 @@ void loop_xtoy()
       Serial.println(buffer);
       #endif
 
-      FastLED.delay(100); // delay also calls show
-
+      FastLED.delay(DELAY); // delay also calls show
       leds[idx] = CRGB::Black; // reset after show
     }
   }
@@ -197,7 +145,7 @@ void loop_lines()
   for (Unit x = 0; x < WIDTH; ++x) {
     FastLED.clear();
     vert_line(x, CRGB::AliceBlue);
-    FastLED.delay(100);
+    FastLED.delay(DELAY);
   }
 }
 
