@@ -3,7 +3,7 @@ TARGET_EXEC ?= test
 BUILD_DIR ?= ./build/emulator
 SRC_DIRS ?= emulator
 LDFLAGS ?= -lstdc++
-SRCS := $(shell find $(SRC_DIRS) -name "*.cpp") $(shell ls *.cpp) 
+SRCS := $(shell find $(SRC_DIRS) -name "*.cpp") $(shell ls *.cpp)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 

@@ -10,6 +10,7 @@
 
 
 const CRGB CRGB::AliceBlue = CRGB('A', 6);
+const CRGB CRGB::GreenYellow = CRGB('G', 154);
 const CRGB CRGB::Red = CRGB('R', 1);
 const CRGB CRGB::Black = CRGB(' ', 0);
 

@@ -31,6 +31,7 @@ struct CRGB
     static const CRGB AliceBlue;
     static const CRGB Red;
     static const CRGB Black;
+    static const CRGB GreenYellow;
 
     char color = ' ';
     int ansi = 0;

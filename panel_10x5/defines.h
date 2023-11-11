@@ -6,4 +6,5 @@
 #define DATA_PIN 11
 #define BRIGHTNESS 10
 
-using Unit = unsigned char;
+using Unit = uint8_t;
+using DataByte = uint8_t;
