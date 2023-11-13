@@ -5,6 +5,8 @@
 
 // x bitmap formed image
 // see https://xbm.jazzychad.net/
+// and bmp2xbm/bmp2xbm.py
+
 struct XBM
 {
     XBM(Unit w, Unit h, const DataByte* x) 
