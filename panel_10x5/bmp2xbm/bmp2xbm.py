@@ -1,4 +1,4 @@
-#!env python3
+#!/usr/bin/env python3
 
 from pathlib import Path
 import argparse
@@ -11,14 +11,15 @@ def main():
     
     parser.add_argument('filename')
     parser.add_argument('-i', '--invert', action='store_true', help='invert image output')
-
-
+    parser.add_argument('-n', '--name', help='class name, defaults to filename')
     args = parser.parse_args()
+
+    name = args.name if args.name else Path(args.filename).stem
 
     im = Image.open(args.filename)
     print("Opened {} with size {}".format(args.filename, im.size))
 
-    xbmout(Path(args.filename).stem, im, args.invert)
+    xbmout(name, im, args.invert)
 
 def xbmout(name, image, invert):
     print('// header file')

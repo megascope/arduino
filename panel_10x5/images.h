@@ -9,7 +9,7 @@
 
 struct XBM
 {
-    XBM(Unit w, Unit h, const DataByte* x) 
+    XBM(Unit w, Unit h, const DataByte* x)
     : width(w), height(h), xbm(x) {
         // XBM format has width/8 characters (i.e. 8 bits)
         elements_per_row = 1+(width/8);
@@ -25,6 +25,7 @@ struct XBM
 
     // images
     static const XBM happy_diwali;
+    static const XBM merry_christmas;
     static const XBM test;
 
 };

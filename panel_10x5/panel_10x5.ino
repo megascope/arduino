@@ -82,11 +82,11 @@ void draw_image(const XBM& image, const Pixel& start, const Pixel& offset) {
         #endif
       }
     }
-  } 
+  }
 }
 
 void scroll_image() {
-  const XBM& image = XBM::happy_diwali;
+  const XBM& image = XBM::merry_christmas;
   Pixel zero(0,0);
 
   // set to true to just set a static image
