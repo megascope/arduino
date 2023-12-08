@@ -7,7 +7,9 @@
 // using ELGOO NANO board, set target as UNO
 // see https://github.com/FastLED/FastLED/blob/master/examples/ColorPalette/ColorPalette.ino
 
-CRGB leds[NUM_LEDS];
+CRGB leds__[NUM_LEDS];
+unsigned loop_count__;
+CRGBPalette16 current_palette__;
 
 struct Pixel {
   Unit x;
@@ -30,22 +32,6 @@ struct Pixel {
   }
   Unit index() { return Pixel::index(x, y); }
 };
-
-CRGBPalette16 gCurrentPalette;
-
-void setup() {
-  delay( 2000 ); // power-up safety delay
-  // put your setup code here, to run once:
-  FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds, NUM_LEDS);
-  FastLED.setBrightness(BRIGHTNESS);
-  chooseNextColorPalette(gCurrentPalette);
-
-#ifdef DEBUG
-  Serial.begin(9600);
-  Serial.println("Serial Output enabled...");
-#endif
-}
-
 
 void draw_image(const XBM& image, const Pixel& start, const Pixel& offset) {
   Unit draw_width = min(image.width-offset.x, WIDTH-start.x);
@@ -73,7 +59,7 @@ void draw_image(const XBM& image, const Pixel& start, const Pixel& offset) {
         #endif
 
         // colorpalette index is pseudorandom but stable for each pixel in the image as it scrolls
-        leds[idx] =  ColorFromPalette(gCurrentPalette, (((imagex+1) + 121) * ((imagey+1) * 54)) & 0xFF);
+        leds__[idx] =  ColorFromPalette(current_palette__, (((imagex+1) + max(loop_count__, 1)) * ((imagey+1) * 54)) & 0xFF);
       } else {
         #ifdef DEBUG
         char buffer[40];
@@ -120,7 +106,7 @@ void loop_xtoy()
       Pixel p(x, y);
       auto idx = p.index();
 
-      leds[idx] = CRGB::Red;
+      leds__[idx] = CRGB::Red;
 
       #ifdef DEBUG
       char buffer[40];
@@ -129,14 +115,14 @@ void loop_xtoy()
       #endif
 
       FastLED.delay(DELAY); // delay also calls show
-      leds[idx] = CRGB::Black; // reset after show
+      leds__[idx] = CRGB::Black; // reset after show
     }
   }
 }
 
 void vert_line(Unit x, CRGB color) {
   for (Unit y = 0; y < HEIGHT; ++y) {
-    leds[Pixel::index(x, y)] = color;
+    leds__[Pixel::index(x, y)] = color;
   }
 }
 
@@ -149,10 +135,26 @@ void loop_lines()
   }
 }
 
+void setup() {
+  loop_count__ = 0;
+  delay( 2000 ); // power-up safety delay
+  // put your setup code here, to run once:
+  FastLED.addLeds<WS2811, DATA_PIN, RGB>(leds__, NUM_LEDS);
+  FastLED.setBrightness(BRIGHTNESS);
+  chooseNextColorPalette(current_palette__);
+
+#ifdef DEBUG
+  Serial.begin(9600);
+  Serial.println("Serial Output enabled...");
+#endif
+}
+
 void loop() {
+  ++loop_count__;
+
   // put your main code here, to run repeatedly:
   //loop_xtoy();
   //loop_lines();
   scroll_image();
-  chooseNextColorPalette(gCurrentPalette);
+  chooseNextColorPalette(current_palette__);
 }
