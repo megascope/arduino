@@ -13,20 +13,28 @@ const CRGB CRGB::GreenYellow = CRGB('G', 154);
 const CRGB CRGB::Red = CRGB('R', 1);
 const CRGB CRGB::Black = CRGB(' ', 0);
 const CRGB CRGB::Green = CRGB('G', 40);
+const CRGB CRGB::Blue = CRGB('B', 21);
 const CRGB CRGB::Yellow = CRGB('Y', 226);
 const CRGB CRGB::Gold = CRGB('G', 220);
 const CRGB CRGB::Orange = CRGB('O', 208);
 const CRGB CRGB::OrangeRed = CRGB('o', 202);
 const CRGB CRGB::Gray = CRGB('G', 243);
+const CRGB CRGB::White = CRGB('W', 255);
 const CRGB CRGB::MediumPurple = CRGB('P', 165);
 
 
 CRGB::operator uint64_t() const
 {
     // return storage
-    uint64_t storage = (uint64_t(color) << 48) 
+    uint64_t storage = (uint64_t(color) << 48)
                     | (uint64_t(ansi) << 32);
     return storage;
+}
+
+CRGB::CRGB(uint32_t red, uint32_t green, uint32_t blue) :
+ CRGB((red << 16) | (green << 8) | blue)
+{
+
 }
 
 CRGB::CRGB(uint64_t storage) {
@@ -47,7 +55,7 @@ CRGB::CRGB(uint64_t storage) {
         int blue = (rgb & 0x0000ff);
 
         // ansi extended colors in 6x6x6 grid
-        // 16-231:  6 × 6 × 6 cube (216 colors): 
+        // 16-231:  6 × 6 × 6 cube (216 colors):
         // 16 + 36 × r + 6 × g + b (0 ≤ r, g, b ≤ 5)
         // 255/6 = 42.5
         red /= 43;

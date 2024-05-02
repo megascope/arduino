@@ -8,7 +8,7 @@ static const int WS2811 = 1;
 static const int DATA_PIN = 1;
 static const int RGB = 1;
 
-//typedef uint64_t TProgmemRGBPalette16[16];  
+//typedef uint64_t TProgmemRGBPalette16[16];
 using TProgmemRGBPalette16 = uint64_t[16];
 struct CRGB;
 
@@ -32,6 +32,7 @@ struct FastLEDClass {
     void clear();
     void delay(int d);
     void display();
+    void show() { display(); }
 
     CRGB* leds = nullptr;
     unsigned size = 0;
@@ -44,6 +45,7 @@ struct CRGB
     CRGB() {}
     CRGB(char c, int ansicolor) : color(c), ansi(ansicolor) {}
     CRGB(uint64_t storage);
+    CRGB(uint32_t red, uint32_t green, uint32_t blue);
 
     operator uint64_t() const;
 
@@ -52,11 +54,13 @@ struct CRGB
     static const CRGB Black;
     static const CRGB GreenYellow;
     static const CRGB Green;
+    static const CRGB Blue;
     static const CRGB Yellow;
     static const CRGB Gold;
     static const CRGB Orange;
     static const CRGB OrangeRed;
     static const CRGB Gray;
+    static const CRGB White;
     static const CRGB MediumPurple;
 
 
