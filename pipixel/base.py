@@ -8,20 +8,23 @@ import signal
 pixel_pin = board.D18
 
 # The number of NeoPixels
-num_pixels = 5
+num_pixels = 100
 
 # The order of the pixel colors - RGB or GRB. Some NeoPixels have red and green reversed!
 # For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
-ORDER = neopixel.RGB
+ORDER = neopixel.GRB
 
-def signal_handler(sig, frame):
-    print("Ctrl+C pressed! Clearing pixels...")
-    # Your cleanup code here
-
+def cleanup():
+    print("Clearing pixels...")
     for i in range(0, num_pixels):
         pixels[i] = (0,0,0)
 
     pixels.show()
+
+def signal_handler(sig, frame):
+    print("Caught", sig)
+    # Your cleanup code here
+    cleanup()
     exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
