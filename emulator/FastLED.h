@@ -7,6 +7,8 @@
 static const int WS2811 = 1;
 static const int DATA_PIN = 1;
 static const int RGB = 1;
+static const int RBG = 1;
+
 
 //typedef uint64_t TProgmemRGBPalette16[16];
 using TProgmemRGBPalette16 = uint64_t[16];
@@ -38,6 +40,10 @@ struct FastLEDClass {
     unsigned size = 0;
 
     int frame = 0;
+
+    private:
+        void display50();
+        void display100();
 };
 
 struct CRGB

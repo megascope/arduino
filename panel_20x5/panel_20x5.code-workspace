@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../emulator"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"new": "cpp",
+			"array": "cpp",
+			"string": "cpp",
+			"string_view": "cpp",
+			"vector": "cpp",
+			"__hash_table": "cpp",
+			"__split_buffer": "cpp",
+			"atomic": "cpp",
+			"ios": "cpp",
+			"system_error": "cpp",
+			"unordered_map": "cpp"
+		}
+	}
+}

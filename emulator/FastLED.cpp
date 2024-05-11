@@ -79,52 +79,85 @@ std::ostream& operator<<(std::ostream& os, const CRGB& led)
     return os;
 }
 
-void FastLEDClass::display() {
-
-    // serpentine LED set 10x5
-
+void FastLEDClass::display()
+{
     // uncomment one of the below to update in place
     //system("clear");
     //std::cout << ANSIHOME;
-    if (size == 50) {
-        std::cout << "- ";
-        for (unsigned i = 0; i < 10; ++i) {
-            CRGB& led = leds[i];
-            std::cout << (i % 10) << ' ';
-        }
-        std::cout << std::endl << "0 ";
-        for (unsigned i = 0; i < 10; ++i) {
-            CRGB& led = leds[i];
-            std::cout << led << ' ';
-        }
-        std::cout << std::endl << "1 ";
-        for (unsigned i = 19; i >= 10; --i) {
-            CRGB& led = leds[i];
-            std::cout << led << ' ';
-        }
-        std::cout << std::endl << "2 ";
-        for (unsigned i = 20; i < 30; ++i) {
-            CRGB& led = leds[i];
-            std::cout << led << ' ';
-        }
-        std::cout << std::endl << "3 ";
-        for (unsigned i = 39; i >= 30; --i) {
-            CRGB& led = leds[i];
-            std::cout << led << ' ';
-        }
-        std::cout << std::endl << "4 ";
-        for (unsigned i = 40; i < 50; ++i) {
-            CRGB& led = leds[i];
-            std::cout << led << ' ';
-        }
-        std::cout << std::endl;
-    } else {
-        for (unsigned i = 0; i <= size; ++i) {
-            CRGB& led = leds[i];
-            std::cout << led.color << ' ';
+    std::cout << "Frame: " << frame++ << std::endl;
+
+    switch (size) {
+        case 100: display100(); return;
+        case 50: display50(); return;
+    }
+
+    for (unsigned i = 0; i <= size; ++i) {
+        CRGB& led = leds[i];
+        std::cout << led.color << ' ';
+    }
+}
+
+void FastLEDClass::display100()
+{
+    // serpentine LED set 20x5 (up/down serpentine)
+
+    std::cout << "- ";
+    for (unsigned i = 0; i < 20; ++i) {
+        CRGB& led = leds[i];
+        std::cout << (i % 10) << ' ';
+    }
+
+    for (unsigned r = 0; r < 5; ++r) {
+        std::cout << std::endl << r << " ";
+        for (unsigned i = 0; i < 20; ++i) {
+            // 1st row is 99, 90, 89, 80, 79 etc.
+            // 2nd row is 98, 91, 88, 81, 78 etc.
+            // 3rd row is 97, 92, 87, 82, 77 etc.
+            unsigned idx = i & 1 ? ((90+r) - (i-1)*5) : ((99-r) - (i*5));
+            std::cout << leds[idx] << ' ';
         }
     }
-    std::cout << "Frame: " << frame++ << std::endl;
+
+    std::cout << std::endl;
+
+}
+
+void FastLEDClass::display50() {
+
+    // serpentine LED set 10x5
+
+    std::cout << "- ";
+    for (unsigned i = 0; i < 10; ++i) {
+        CRGB& led = leds[i];
+        std::cout << (i % 10) << ' ';
+    }
+    std::cout << std::endl << "0 ";
+    for (unsigned i = 0; i < 10; ++i) {
+        CRGB& led = leds[i];
+        std::cout << led << ' ';
+    }
+    std::cout << std::endl << "1 ";
+    for (unsigned i = 19; i >= 10; --i) {
+        CRGB& led = leds[i];
+        std::cout << led << ' ';
+    }
+    std::cout << std::endl << "2 ";
+    for (unsigned i = 20; i < 30; ++i) {
+        CRGB& led = leds[i];
+        std::cout << led << ' ';
+    }
+    std::cout << std::endl << "3 ";
+    for (unsigned i = 39; i >= 30; --i) {
+        CRGB& led = leds[i];
+        std::cout << led << ' ';
+    }
+    std::cout << std::endl << "4 ";
+    for (unsigned i = 40; i < 50; ++i) {
+        CRGB& led = leds[i];
+        std::cout << led << ' ';
+    }
+    std::cout << std::endl;
+
 }
 
 void FastLEDClass::delay(int d) {
